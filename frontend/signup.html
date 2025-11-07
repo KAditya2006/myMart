@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/media/logo.png">
+  <title>Sign Up - myMart</title>
+  <style>
+    /* ===== General Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #AED6CF 0%, #91ADC8 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* ===== Signup Container ===== */
+    .signup-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 30px;
+      position: relative;
+    }
+
+    /* ===== Logo Section ===== */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .logo-section h1 {
+      color: #ff7a18;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .logo-section p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* ===== Form Styles ===== */
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #ff7a18;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
+    }
+
+    .form-group.success input {
+      border-color: #2ecc71;
+    }
+
+    .form-group.error input {
+      border-color: #e74c3c;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .password-strength {
+      height: 5px;
+      border-radius: 5px;
+      margin-top: 8px;
+      background: #eee;
+      overflow: hidden;
+    }
+
+    .strength-meter {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s;
+    }
+
+    .strength-weak {
+      background: #e74c3c;
+      width: 33%;
+    }
+
+    .strength-medium {
+      background: #f39c12;
+      width: 66%;
+    }
+
+    .strength-strong {
+      background: #2ecc71;
+      width: 100%;
+    }
+
+    .strength-text {
+      font-size: 12px;
+      margin-top: 5px;
+      color: #666;
+    }
+
+    /* ===== Terms & Conditions ===== */
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+
+    .terms input {
+      margin-right: 10px;
+      margin-top: 3px;
+    }
+
+    .terms label {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .terms a {
+      color: #ff7a18;
+      text-decoration: none;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== Submit Button ===== */
+    .submit-btn {
+      background: #ff7a18;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-bottom: 20px;
+    }
+
+    .submit-btn:hover {
+      background: #e26500;
+    }
+
+    .submit-btn:active {
+      transform: translateY(1px);
+    }
+
+    .submit-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+    /* ===== Divider ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e1e5e9;
+    }
+
+    .divider span {
+      padding: 0 15px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* ===== Social Signup ===== */
+    .social-signup {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #e1e5e9;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 20px;
+    }
+
+    .social-btn:hover {
+      border-color: #ff7a18;
+      transform: translateY(-2px);
+    }
+
+    .google { 
+      color: #DB4437; 
+      background: white;
+    }
+    .facebook { 
+      color: #4267B2; 
+      background: white;
+    }
+    .twitter { 
+      color: #1DA1F2; 
+      background: white;
+    }
+
+    /* ===== Login Link ===== */
+    .login-link {
+      text-align: center;
+      color: #666;
+    }
+
+    .login-link a {
+      color: #ff7a18;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 5px;
+      transition: color 0.3s;
+    }
+
+    .login-link a:hover {
+      color: #e26500;
+      text-decoration: underline;
+    }
+
+    /* ===== Error Message ===== */
+    .error-message {
+      background: #ffe6e6;
+      color: #d63031;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .field-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* ===== Success Message ===== */
+    .success-message {
+      background: #e6ffe6;
+      color: #2e7d32;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 480px) {
+      .signup-container {
+        padding: 30px 20px;
+      }
+      
+      .logo {
+        width: 100px;
+      }
+      
+      .logo-section h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <img src="/media/logo.png" alt="myMart Logo" class="logo">
+      <h1>Join myMart</h1>
+      <p>Create your account to start shopping</p>
+    </div>
+
+    <!-- Error Message (hidden by default) -->
+    <div class="error-message" id="errorMessage">
+      Please fix the errors below to continue.
+    </div>
+
+    <!-- Success Message (hidden by default) -->
+    <div class="success-message" id="successMessage">
+      Account created successfully! Redirecting to login...
+    </div>
+
+    <!-- Signup Form -->
+    <form class="signup-form" id="signupForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Enter your full name" required>
+        <div class="field-error" id="fullNameError">Please enter your full name</div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <div class="field-error" id="emailError">Please enter a valid email address</div>
+      </div>
+
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <input type="tel" id="mobile" placeholder="Enter your mobile number" required>
+        <div class="field-error" id="mobileError">Please enter a valid mobile number</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Create a password" required>
+          <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+        </div>
+        <div class="password-strength">
+          <div class="strength-meter" id="strengthMeter"></div>
+        </div>
+        <div class="strength-text" id="strengthText">Password strength</div>
+        <div class="field-error" id="passwordError">Password must be at least 8 characters</div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-container">
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+          <button type="button" class="toggle-password" id="toggleConfirmPassword">👁️</button>
+        </div>
+        <div class="field-error" id="confirmPasswordError">Passwords do not match</div>
+      </div>
+
+      <div class="terms">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+    </form>
+
+    <!-- Divider -->
+    <!-- <div class="divider">
+      <span>Or sign up with</span>
+    </div> -->
+
+    <!-- Social Signup Options -->
+    <!-- <div class="social-signup">
+      <button class="social-btn google" onclick="socialSignup('google')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      </button>
+      <button class="social-btn facebook" onclick="socialSignup('facebook')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      </button>
+      <button class="social-btn twitter" onclick="socialSignup('twitter')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+        </svg>
+      </button>
+    </div> -->
+
+    <!-- Login Link -->
+    <div class="login-link">
+      Already have an account? <a href="login.html">Sign In</a>
+    </div>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+
+    // Password strength indicator
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const strengthMeter = document.getElementById('strengthMeter');
+      const strengthText = document.getElementById('strengthText');
+      
+      // Reset
+      strengthMeter.className = 'strength-meter';
+      
+      if (password.length === 0) {
+        strengthText.textContent = 'Password strength';
+        return;
+      }
+      
+      // Calculate strength
+      let strength = 0;
+      
+      // Length check
+      if (password.length >= 8) strength++;
+      
+      // Contains lowercase
+      if (/[a-z]/.test(password)) strength++;
+      
+      // Contains uppercase
+      if (/[A-Z]/.test(password)) strength++;
+      
+      // Contains numbers
+      if (/[0-9]/.test(password)) strength++;
+      
+      // Contains special characters
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      // Update UI based on strength
+      if (strength <= 2) {
+        strengthMeter.classList.add('strength-weak');
+        strengthText.textContent = 'Weak password';
+        strengthText.style.color = '#e74c3c';
+      } else if (strength <= 4) {
+        strengthMeter.classList.add('strength-medium');
+        strengthText.textContent = 'Medium strength password';
+        strengthText.style.color = '#f39c12';
+      } else {
+        strengthMeter.classList.add('strength-strong');
+        strengthText.textContent = 'Strong password';
+        strengthText.style.color = '#2ecc71';
+      }
+    });
+
+    // Check if email or mobile already exists
+    function isUserExists(email, mobile) {
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      return users.some(user => 
+        user.email.toLowerCase() === email.toLowerCase() || 
+        user.mobile === mobile
+      );
+    }
+
+    // Form validation and submission
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Reset errors
+      resetErrors();
+      
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const terms = document.getElementById('terms').checked;
+      
+      let isValid = true;
+      
+      // Validate full name
+      if (fullName.length < 2) {
+        showFieldError('fullNameError', 'Please enter your full name');
+        isValid = false;
+      }
+      
+      // Validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showFieldError('emailError', 'Please enter a valid email address');
+        isValid = false;
+      }
+      
+      // Validate mobile
+      const mobileRegex = /^[0-9]{10}$/;
+      if (!mobileRegex.test(mobile)) {
+        showFieldError('mobileError', 'Please enter a valid 10-digit mobile number');
+        isValid = false;
+      }
+      
+      // Validate password
+      if (password.length < 8) {
+        showFieldError('passwordError', 'Password must be at least 8 characters');
+        isValid = false;
+      }
+      
+      // Validate password confirmation
+      if (password !== confirmPassword) {
+        showFieldError('confirmPasswordError', 'Passwords do not match');
+        isValid = false;
+      }
+      
+      // Check for duplicate users
+      if (isValid && isUserExists(email, mobile)) {
+        showFieldError('emailError', 'An account with this email or mobile number already exists');
+        isValid = false;
+      }
+      
+      // Validate terms
+      if (!terms) {
+        document.getElementById('errorMessage').textContent = 'You must agree to the Terms of Service and Privacy Policy';
+        document.getElementById('errorMessage').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (isValid) {
+        registerUser(fullName, email, mobile, password);
+      } else {
+        document.getElementById('errorMessage').style.display = 'block';
+      }
+    });
+
+    function resetErrors() {
+      // Hide all error messages
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      
+      const fieldErrors = document.querySelectorAll('.field-error');
+      fieldErrors.forEach(error => {
+        error.style.display = 'none';
+      });
+      
+      // Reset form group classes
+      const formGroups = document.querySelectorAll('.form-group');
+      formGroups.forEach(group => {
+        group.classList.remove('error', 'success');
+      });
+    }
+
+    function showFieldError(fieldId, message) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.textContent = message;
+      fieldError.style.display = 'block';
+      
+      // Add error class to parent form group
+      const formGroup = fieldError.closest('.form-group');
+      formGroup.classList.add('error');
+    }
+
+    function registerUser(fullName, email, mobile, password) {
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+      
+      // Show loading state
+      submitBtn.textContent = 'Creating Account...';
+      submitBtn.disabled = true;
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        // Get existing users or initialize empty array
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Create new user object
+        const newUser = {
+          id: Date.now().toString(),
+          fullName: fullName,
+          email: email.toLowerCase(),
+          mobile: mobile,
+          password: password, // In real app, this should be hashed
+          createdAt: new Date().toISOString(),
+          profile: {
+            firstName: fullName.split(' ')[0] || '',
+            lastName: fullName.split(' ').slice(1).join(' ') || '',
+            email: email,
+            phone: mobile,
+            birthdate: '',
+            gender: '',
+            emailNotifications: true,
+            smsNotifications: false
+          }
+        };
+        
+        // Add new user to users array
+        users.push(newUser);
+        
+        // Save to localStorage
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Show success message
+        document.getElementById('successMessage').style.display = 'block';
+        document.getElementById('errorMessage').style.display = 'none';
+        
+        // Redirect to login after a delay
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      }, 1500);
+    }
+
+    // Social signup function
+    function socialSignup(provider) {
+      // Show loading state on button
+      const button = event.currentTarget;
+      const originalHTML = button.innerHTML;
+      button.innerHTML = '<div style="width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s linear infinite"></div>';
+      button.disabled = true;
+      
+      // Simulate social authentication
+      setTimeout(() => {
+        // Generate mock social user data
+        const socialUsers = {
+          google: {
+            fullName: 'Google User',
+            email: `google.user${Math.floor(Math.random() * 1000)}@gmail.com`,
+            mobile: `9${Math.floor(100000000 + Math.random() * 900000000)}`
+          },
+          facebook: {
+            fullName: 'Facebook User',
+            email: `facebook.user${Math.floor(Math.random() * 1000)}@facebook.com`,
+            mobile: `9${Math.floor(100000000 + Math.random() * 900000000)}`
+          },
+          twitter: {
+            fullName: 'Twitter User',
+            email: `twitter.user${Math.floor(Math.random() * 1000)}@twitter.com`,
+            mobile: `9${Math.floor(100000000 + Math.random() * 900000000)}`
+          }
+        };
+        
+        const socialUser = socialUsers[provider];
+        
+        // Check if user already exists
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const existingUser = users.find(user => user.email === socialUser.email);
+        
+        if (existingUser) {
+          // User exists, log them in
+          const userSession = {
+            id: existingUser.id,
+            fullName: existingUser.fullName,
+            email: existingUser.email,
+            mobile: existingUser.mobile,
+            profile: existingUser.profile
+          };
+          
+          localStorage.setItem('currentUser', JSON.stringify(userSession));
+          window.location.href = 'homePage.html';
+        } else {
+          // Create new social user
+          const newUser = {
+            id: Date.now().toString(),
+            fullName: socialUser.fullName,
+            email: socialUser.email,
+            mobile: socialUser.mobile,
+            password: 'social_auth', // Special indicator for social login
+            provider: provider,
+            createdAt: new Date().toISOString(),
+            profile: {
+              firstName: socialUser.fullName.split(' ')[0] || '',
+              lastName: socialUser.fullName.split(' ').slice(1).join(' ') || '',
+              email: socialUser.email,
+              phone: socialUser.mobile,
+              birthdate: '',
+              gender: '',
+              emailNotifications: true,
+              smsNotifications: false
+            }
+          };
+          
+          users.push(newUser);
+          localStorage.setItem('users', JSON.stringify(users));
+          
+          // Log in the new user
+          const userSession = {
+            id: newUser.id,
+            fullName: newUser.fullName,
+            email: newUser.email,
+            mobile: newUser.mobile,
+            profile: newUser.profile
+          };
+          
+          localStorage.setItem('currentUser', JSON.stringify(userSession));
+          window.location.href = 'homePage.html';
+        }
+      }, 2000);
+    }
+
+    // Add CSS for loading spinner
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Real-time validation for better UX
+    document.getElementById('fullName').addEventListener('blur', function() {
+      if (this.value.trim().length < 2) {
+        showFieldError('fullNameError', 'Please enter your full name');
+      } else {
+        hideFieldError('fullNameError');
+      }
+    });
+
+    document.getElementById('email').addEventListener('blur', function() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const email = this.value.trim();
+      
+      if (!emailRegex.test(email)) {
+        showFieldError('emailError', 'Please enter a valid email address');
+      } else if (isUserExists(email, '')) {
+        showFieldError('emailError', 'An account with this email already exists');
+      } else {
+        hideFieldError('emailError');
+      }
+    });
+
+    document.getElementById('mobile').addEventListener('blur', function() {
+      const mobileRegex = /^[0-9]{10}$/;
+      const mobile = this.value.trim();
+      
+      if (!mobileRegex.test(mobile)) {
+        showFieldError('mobileError', 'Please enter a valid 10-digit mobile number');
+      } else if (isUserExists('', mobile)) {
+        showFieldError('mobileError', 'An account with this mobile number already exists');
+      } else {
+        hideFieldError('mobileError');
+      }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('blur', function() {
+      const password = document.getElementById('password').value;
+      if (this.value !== password) {
+        showFieldError('confirmPasswordError', 'Passwords do not match');
+      } else {
+        hideFieldError('confirmPasswordError');
+      }
+    });
+
+    function hideFieldError(fieldId) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.style.display = 'none';
+      
+      // Remove error class from parent form group
+      const formGroup = fieldError.closest('.form-group');
+      formGroup.classList.remove('error');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/media/logo.png">
+  <title>Contact Us - myMart</title>
+  <style>
+    /* ===== General Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #AED6CF;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ===== Navbar ===== */
+    nav {
+      background: #91ADC8;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #ffcc00;
+    }
+
+    .nav-links a.active {
+      color: #ffcc00;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .actions a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      background: #ff7a18;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.3s;
+      font-weight: 500;
+    }
+
+    .actions a:hover {
+      background: #e26500;
+    }
+
+    .cart-count {
+      background: #ff3333;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 12px;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+    }
+
+    .cart-link {
+      position: relative;
+    }
+
+    /* ===== Toggle Button ===== */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 4px 0;
+      transition: 0.3s;
+    }
+
+    /* ===== Contact Section ===== */
+    .contact-section {
+      padding: 100px 20px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .contact-info h2 {
+      font-size: 32px;
+      margin-bottom: 25px;
+      color: #ff7a18;
+      position: relative;
+    }
+
+    .contact-info h2::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: #ff7a18;
+      margin-top: 10px;
+      border-radius: 2px;
+    }
+
+    .contact-info p {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .contact-info strong {
+      color: #333;
+    }
+
+    .contact-details {
+      margin-top: 30px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background: #ff7a18;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+      color: white;
+      font-size: 20px;
+    }
+
+    .contact-text h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .contact-text p {
+      margin-bottom: 0;
+      color: #666;
+    }
+
+    .social-contact {
+      margin-top: 30px;
+    }
+
+    .social-contact h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #91ADC8;
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: #ff7a18;
+      transform: translateY(-3px);
+    }
+
+    .contact-form {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .contact-form h2 {
+      font-size: 32px;
+      margin-bottom: 25px;
+      color: #ff7a18;
+      position: relative;
+    }
+
+    .contact-form h2::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: #ff7a18;
+      margin-top: 10px;
+      border-radius: 2px;
+    }
+
+    .contact-form form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+      resize: none;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #ff7a18;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
+    }
+
+    .contact-form textarea {
+      height: 150px;
+    }
+
+    .contact-form button {
+      padding: 16px;
+      background: #ff7a18;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .contact-form button:hover {
+      background: #e26500;
+    }
+
+    .contact-form button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .form-success {
+      background: #e6ffe6;
+      color: #2e7d32;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .form-error {
+      background: #ffe6e6;
+      color: #d63031;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .field-error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* ===== FAQ Section ===== */
+    .faq-section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+
+    .faq-section h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #ff7a18;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      margin-bottom: 15px;
+      border: 1px solid #e1e5e9;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 18px 20px;
+      background: #f9f9f9;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .faq-question:hover {
+      background: #f0f0f0;
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 20px;
+      max-height: 500px;
+    }
+
+    .faq-toggle {
+      font-size: 20px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* ===== Map Section ===== */
+    .map-section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .map-section h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: #ff7a18;
+    }
+
+    .map-container {
+      height: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 18px;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #91ADC8;
+      color: #fff;
+      padding: 50px 20px 20px;
+      margin-top: 60px;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-col h3 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      border-bottom: 2px solid #ffcc00;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .footer-col ul li a:hover {
+      color: #ffcc00;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: #34495e;
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      background: #ff7a18;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      padding-top: 20px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== Toast Notification ===== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links,
+      .actions {
+        display: none;
+        flex-direction: column;
+        background: #91ADC8;
+        width: 100%;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        text-align: center;
+        padding: 15px 0;
+      }
+
+      .nav-links.active,
+      .actions.active {
+        display: flex;
+      }
+
+      .contact-section {
+        padding-top: 80px;
+      }
+
+      .contact-info,
+      .contact-form {
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-info h2,
+      .contact-form h2,
+      .faq-section h2,
+      .map-section h2 {
+        font-size: 28px;
+      }
+
+      .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .contact-icon {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo"><img src="/media/logo.png" alt="myMart logo"></div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="homePage.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="deals.html">Deals</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+
+    <div class="actions">
+      <a href="login.html">Login</a>
+      <a href="cart.html" class="cart-link">Cart 🛒 <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="contact-info">
+      <h2>Get In Touch</h2>
+      <p>We'd love to hear from you! Whether you have a question about products, pricing, or anything else, our team is ready to answer all your questions.</p>
+      
+      <div class="contact-details">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <h3>Our Address</h3>
+            <p>423, GIET BH1, Baniatangi, Khurda, 752060</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div class="contact-text">
+            <h3>Email Us</h3>
+            <p>kaditya39546@gmail.com</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-text">
+            <h3>Call Us</h3>
+            <p>+91 9102141837</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">🕒</div>
+          <div class="contact-text">
+            <h3>Business Hours</h3>
+            <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="social-contact">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="#" title="Facebook">f</a>
+          <a href="#" title="Twitter">t</a>
+          <a href="#" title="Instagram">📸</a>
+          <a href="#" title="YouTube">▶️</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h2>Send Us a Message</h2>
+      
+      <div class="form-success" id="formSuccess">
+        Thank you for your message! We'll get back to you within 24 hours.
+      </div>
+      
+      <div class="form-error" id="formError">
+        Please fix the errors below before submitting.
+      </div>
+      
+      <form id="contactForm">
+        <div class="form-group">
+          <input type="text" id="name" placeholder="Your Full Name" required>
+          <div class="field-error" id="nameError">Please enter your name</div>
+        </div>
+        
+        <div class="form-group">
+          <input type="email" id="email" placeholder="Your Email Address" required>
+          <div class="field-error" id="emailError">Please enter a valid email address</div>
+        </div>
+        
+        <div class="form-group">
+          <input type="text" id="subject" placeholder="Subject" required>
+          <div class="field-error" id="subjectError">Please enter a subject</div>
+        </div>
+        
+        <div class="form-group">
+          <textarea id="message" placeholder="Your Message" required></textarea>
+          <div class="field-error" id="messageError">Please enter your message</div>
+        </div>
+        
+        <button type="submit" id="submitBtn">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question">
+          How long does shipping take?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Standard shipping typically takes 5-7 business days. Express shipping is available for an additional fee and delivers within 2-3 business days.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          What is your return policy?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>We offer a 30-day return policy for most items in original condition. Some items like electronics have a 14-day return window. Please check the product page for specific return information.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          Do you offer international shipping?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Currently, we only ship within India. We're working on expanding our shipping options to other countries in the near future.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          How can I track my order?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Once your order ships, you'll receive a tracking number via email. You can use this number to track your package on our website or the carrier's website.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          What payment methods do you accept?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>We accept all major credit cards, debit cards, UPI payments, net banking, and cash on delivery for eligible orders.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="map-section">
+    <h2>Find Us</h2>
+    <div class="map-container">
+      <!-- In a real implementation, you would embed a Google Maps iframe here -->
+      <p>📍 Map would be displayed here</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>myMart</h3>
+        <p>Your one-stop online store for fashion, electronics, and more.</p>
+        <div class="social-links">
+          <a href="#" title="Facebook">f</a>
+          <a href="#" title="Twitter">t</a>
+          <a href="#" title="Instagram">📸</a>
+          <a href="#" title="YouTube">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="homePage.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="deals.html">Deals</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact Info</h3>
+        <ul>
+          <li>📧 support@mymart.com</li>
+          <li>📞 +91 9102141837</li>
+          <li>📍 423, GIET BH1, Baniatangi, Khurda, 752060</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 myMart. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Cart functionality
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCartCount();
+      setupContactForm();
+      setupFAQ();
+    });
+
+    // Toggle mobile menu
+    function toggleMenu() {
+      document.querySelector(".nav-links").classList.toggle("active");
+      document.querySelector(".actions").classList.toggle("active");
+    }
+
+    // Update cart count in navbar
+    function updateCartCount() {
+      const cartCount = document.querySelector('.cart-count');
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartCount.textContent = totalItems;
+    }
+
+    // Setup contact form
+    function setupContactForm() {
+      const form = document.getElementById('contactForm');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Reset errors
+        resetFormErrors();
+        
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+        
+        let isValid = true;
+        
+        // Validate name
+        if (name.length < 2) {
+          showFieldError('nameError', 'Please enter your full name');
+          isValid = false;
+        }
+        
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showFieldError('emailError', 'Please enter a valid email address');
+          isValid = false;
+        }
+        
+        // Validate subject
+        if (subject.length < 5) {
+          showFieldError('subjectError', 'Please enter a subject with at least 5 characters');
+          isValid = false;
+        }
+        
+        // Validate message
+        if (message.length < 10) {
+          showFieldError('messageError', 'Please enter a message with at least 10 characters');
+          isValid = false;
+        }
+        
+        if (isValid) {
+          // Show loading state
+          submitBtn.textContent = 'Sending...';
+          submitBtn.disabled = true;
+          
+          // Simulate form submission
+          setTimeout(() => {
+            // Show success message
+            document.getElementById('formSuccess').style.display = 'block';
+            document.getElementById('formError').style.display = 'none';
+            
+            // Reset form
+            form.reset();
+            
+            // Reset button
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = false;
+            
+            // Show toast
+            showToast('Your message has been sent successfully!');
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+              document.getElementById('formSuccess').style.display = 'none';
+            }, 5000);
+          }, 1500);
+        } else {
+          document.getElementById('formError').style.display = 'block';
+          document.getElementById('formSuccess').style.display = 'none';
+        }
+      });
+    }
+
+    // Reset form errors
+    function resetFormErrors() {
+      document.getElementById('formError').style.display = 'none';
+      
+      const fieldErrors = document.querySelectorAll('.field-error');
+      fieldErrors.forEach(error => {
+        error.style.display = 'none';
+      });
+    }
+
+    // Show field error
+    function showFieldError(fieldId, message) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.textContent = message;
+      fieldError.style.display = 'block';
+    }
+
+    // Setup FAQ accordion
+    function setupFAQ() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close all other items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+    }
+
+    // Show toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Real-time validation for better UX
+    document.getElementById('name').addEventListener('blur', function() {
+      if (this.value.trim().length < 2) {
+        showFieldError('nameError', 'Please enter your full name');
+      } else {
+        hideFieldError('nameError');
+      }
+    });
+
+    document.getElementById('email').addEventListener('blur', function() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.value.trim())) {
+        showFieldError('emailError', 'Please enter a valid email address');
+      } else {
+        hideFieldError('emailError');
+      }
+    });
+
+    document.getElementById('subject').addEventListener('blur', function() {
+      if (this.value.trim().length < 5) {
+        showFieldError('subjectError', 'Please enter a subject with at least 5 characters');
+      } else {
+        hideFieldError('subjectError');
+      }
+    });
+
+    document.getElementById('message').addEventListener('blur', function() {
+      if (this.value.trim().length < 10) {
+        showFieldError('messageError', 'Please enter a message with at least 10 characters');
+      } else {
+        hideFieldError('messageError');
+      }
+    });
+
+    function hideFieldError(fieldId) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

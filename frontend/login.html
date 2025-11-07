@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/media/logo.png">
+  <title>Login - myMart</title>
+  <style>
+    /* ===== General Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #AED6CF 0%, #91ADC8 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* ===== Login Container ===== */
+    .login-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      width: 100%;
+      max-width: 450px;
+      padding: 40px 35px;
+      position: relative;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    /* ===== Logo Section ===== */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .logo-section h1 {
+      color: #ff7a18;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .logo-section p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* ===== Form Styles ===== */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #ff7a18;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.2);
+    }
+
+    .form-group.error input {
+      border-color: #e74c3c;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 18px;
+      transition: color 0.3s;
+    }
+
+    .toggle-password:hover {
+      color: #ff7a18;
+    }
+
+    .field-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* ===== Remember Me & Forgot Password ===== */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+
+    .remember-me input {
+      margin-right: 8px;
+      accent-color: #ff7a18;
+    }
+
+    .remember-me label {
+      color: #666;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .forgot-password {
+      color: #ff7a18;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .forgot-password:hover {
+      color: #e26500;
+      text-decoration: underline;
+    }
+
+    /* ===== Submit Button ===== */
+    .submit-btn {
+      background: #ff7a18;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover {
+      background: #e26500;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 122, 24, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .submit-btn.loading {
+      color: transparent;
+    }
+
+    .submit-btn.loading::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.8s ease infinite;
+    }
+
+    /* ===== Divider ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 30px 0;
+      color: #666;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e1e5e9;
+    }
+
+    .divider span {
+      padding: 0 15px;
+      font-size: 14px;
+    }
+
+    /* ===== Social Login ===== */
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px solid #e1e5e9;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .social-btn:hover {
+      border-color: #ff7a18;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .social-btn:active {
+      transform: translateY(0);
+    }
+
+    .social-btn.loading {
+      pointer-events: none;
+    }
+
+    .social-btn.loading::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.8s ease infinite;
+    }
+
+    .google { 
+      color: #DB4437; 
+    }
+    .google.loading::after {
+      border-color: #DB4437;
+      border-top-color: transparent;
+    }
+
+    .facebook { 
+      color: #4267B2; 
+    }
+    .facebook.loading::after {
+      border-color: #4267B2;
+      border-top-color: transparent;
+    }
+
+    .twitter { 
+      color: #1DA1F2; 
+    }
+    .twitter.loading::after {
+      border-color: #1DA1F2;
+      border-top-color: transparent;
+    }
+
+    /* ===== System Auth Modal ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      padding: 30px;
+      position: relative;
+      animation: slideUp 0.3s ease;
+      text-align: center;
+    }
+
+    .modal-header {
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .modal-header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #ff7a18;
+    }
+
+    .system-auth-content {
+      margin: 20px 0;
+    }
+
+    .system-account {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .system-account:hover {
+      border-color: #ff7a18;
+      background: rgba(255, 122, 24, 0.05);
+    }
+
+    .system-account-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 15px;
+      background: #ff7a18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .system-account-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .system-account-name {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .system-account-email {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .system-auth-button {
+      background: #ff7a18;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    .system-auth-button:hover {
+      background: #e26500;
+      transform: translateY(-1px);
+    }
+
+    .system-auth-button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ===== Sign Up Link ===== */
+    .signup-link {
+      text-align: center;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .signup-link a {
+      color: #ff7a18;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 5px;
+      transition: color 0.3s;
+    }
+
+    .signup-link a:hover {
+      color: #e26500;
+      text-decoration: underline;
+    }
+
+    /* ===== Home Link ===== */
+    .home-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .home-link a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .home-link a:hover {
+      color: #ff7a18;
+    }
+
+    /* ===== Error Message ===== */
+    .error-message {
+      background: #ffe6e6;
+      color: #d63031;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+      border-left: 4px solid #d63031;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    /* ===== Success Message ===== */
+    .success-message {
+      background: #e6ffe6;
+      color: #2e7d32;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+      border-left: 4px solid #2e7d32;
+      animation: slideDown 0.5s ease-out;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+      
+      .logo {
+        width: 100px;
+      }
+      
+      .logo-section h1 {
+        font-size: 24px;
+      }
+      
+      .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .social-login {
+        gap: 12px;
+      }
+
+      .social-btn {
+        width: 50px;
+        height: 50px;
+      }
+
+      .modal-content {
+        padding: 20px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+      <img src="/media/logo.png" alt="myMart Logo" class="logo">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your account to continue shopping</p>
+    </div>
+
+    <!-- Error Message (hidden by default) -->
+    <div class="error-message" id="errorMessage">
+      Invalid email or password. Please try again.
+    </div>
+
+    <!-- Success Message (hidden by default) -->
+    <div class="success-message" id="successMessage">
+      Login successful! Redirecting...
+    </div>
+
+    <!-- Login Form -->
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label for="loginId">Email or Mobile Number</label>
+        <input type="text" id="loginId" placeholder="Enter your email or mobile number" required>
+        <div class="field-error" id="loginIdError">Please enter a valid email or 10-digit mobile number</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+        </div>
+        <div class="field-error" id="passwordError">Please enter your password</div>
+      </div>
+
+      <div class="form-options">
+        <div class="remember-me">
+          <input type="checkbox" id="remember">
+          <label for="remember">Remember me</label>
+        </div>
+        <a href="#" class="forgot-password" id="forgotPassword">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        Sign In
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <!-- <div class="divider">
+      <span>Or continue with</span>
+    </div> -->
+
+    <!-- Social Login Options -->
+    <!-- <div class="social-login">
+      <button class="social-btn google" id="googleLogin" onclick="initiateSystemAuth('google')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+      </button>
+      <button class="social-btn facebook" id="facebookLogin" onclick="initiateSystemAuth('facebook')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      </button>
+      <button class="social-btn twitter" id="twitterLogin" onclick="initiateSystemAuth('twitter')">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+        </svg>
+      </button>
+    </div> -->
+
+    <!-- Sign Up Link -->
+    <div class="signup-link">
+      Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+
+    <!-- Home Link -->
+    <div class="home-link">
+      <!-- <a href="index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        Back to Home
+      </a> -->
+    </div>
+  </div>
+
+  <!-- System Authentication Modal -->
+  <div class="modal" id="systemAuthModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeSystemAuth()">&times;</button>
+      <div class="modal-header">
+        <h2 id="modalTitle">Sign in with <span id="providerName"></span></h2>
+        <p>Choose an account to continue to myMart</p>
+      </div>
+      
+      <div class="system-auth-content" id="systemAuthContent">
+        <!-- System accounts will be dynamically populated here -->
+      </div>
+      
+      <button class="system-auth-button" id="systemAuthButton" onclick="completeSystemAuth()">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const loginIdInput = document.getElementById('loginId');
+    const passwordInput = document.getElementById('password');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const loginIdError = document.getElementById('loginIdError');
+    const passwordError = document.getElementById('passwordError');
+    const rememberCheckbox = document.getElementById('remember');
+    const forgotPasswordLink = document.getElementById('forgotPassword');
+    const systemAuthModal = document.getElementById('systemAuthModal');
+    const systemAuthContent = document.getElementById('systemAuthContent');
+    const systemAuthButton = document.getElementById('systemAuthButton');
+    const providerName = document.getElementById('providerName');
+
+    let currentProvider = '';
+    let selectedSystemAccount = null;
+
+    // Toggle password visibility
+    togglePasswordBtn.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+
+    // Initialize system authentication
+    function initiateSystemAuth(provider) {
+      currentProvider = provider;
+      providerName.textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
+      
+      // Show loading state
+      const button = document.getElementById(`${provider}Login`);
+      setLoadingState(button, true);
+      
+      // Simulate system account detection
+      setTimeout(() => {
+        setLoadingState(button, false);
+        showSystemAccounts(provider);
+      }, 1000);
+    }
+
+    // Show system accounts modal
+    function showSystemAccounts(provider) {
+      // Get system accounts (simulating browser/OS account detection)
+      const systemAccounts = getSystemAccounts(provider);
+      
+      if (systemAccounts.length === 0) {
+        // No accounts found, show sign-in prompt
+        systemAuthContent.innerHTML = `
+          <div style="text-align: center; padding: 20px;">
+            <div style="font-size: 48px; margin-bottom: 15px;">🔐</div>
+            <p style="color: #666; margin-bottom: 20px;">No ${provider} accounts found on this device.</p>
+            <p style="color: #666; font-size: 14px;">You'll be redirected to ${provider} to sign in.</p>
+          </div>
+        `;
+        systemAuthButton.textContent = `Sign in with ${provider}`;
+        selectedSystemAccount = null;
+      } else {
+        // Show available accounts
+        systemAuthContent.innerHTML = '';
+        systemAccounts.forEach(account => {
+          const accountElement = document.createElement('div');
+          accountElement.className = 'system-account';
+          accountElement.onclick = () => selectSystemAccount(account, accountElement);
+          
+          const avatarText = account.name.split(' ').map(n => n[0]).join('').toUpperCase();
+          
+          accountElement.innerHTML = `
+            <div class="system-account-avatar">${avatarText}</div>
+            <div class="system-account-info">
+              <div class="system-account-name">${account.name}</div>
+              <div class="system-account-email">${account.email}</div>
+            </div>
+          `;
+          
+          systemAuthContent.appendChild(accountElement);
+        });
+        
+        systemAuthButton.textContent = 'Continue';
+        selectedSystemAccount = systemAccounts[0];
+        // Select first account by default
+        if (systemAccounts.length > 0) {
+          systemAuthContent.children[0].style.borderColor = '#ff7a18';
+          systemAuthContent.children[0].style.background = 'rgba(255, 122, 24, 0.1)';
+        }
+      }
+      
+      systemAuthModal.style.display = 'flex';
+    }
+
+    // Get system accounts (simulating real system account detection)
+    function getSystemAccounts(provider) {
+      // This simulates the browser/OS providing available accounts
+      // In a real implementation, this would use:
+      // - Web Authentication API (WebAuthn)
+      // - Credential Management API
+      // - Platform-specific account APIs
+        
+      const systemAccounts = JSON.parse(localStorage.getItem(`systemAccounts_${provider}`)) || [];
+      
+      // If no stored accounts, simulate system account detection
+      if (systemAccounts.length === 0) {
+        // Check if user has previously logged in with this provider
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const socialUsers = users.filter(user => user.provider === provider);
+        
+        if (socialUsers.length > 0) {
+          // Convert existing social users to system accounts
+          socialUsers.forEach(user => {
+            systemAccounts.push({
+              id: user.id,
+              name: user.fullName,
+              email: user.email,
+              provider: provider,
+              profile: user.profile
+            });
+          });
+          localStorage.setItem(`systemAccounts_${provider}`, JSON.stringify(systemAccounts));
+        } else {
+          // Simulate detecting system accounts based on common patterns
+          const commonAccounts = simulateSystemAccountDetection(provider);
+          localStorage.setItem(`systemAccounts_${provider}`, JSON.stringify(commonAccounts));
+          return commonAccounts;
+        }
+      }
+      
+      return systemAccounts;
+    }
+
+    // Simulate system account detection
+    function simulateSystemAccountDetection(provider) {
+      // Get system information to create realistic accounts
+      const userAgent = navigator.userAgent;
+      const isWindows = userAgent.includes('Windows');
+      const isMac = userAgent.includes('Mac');
+      const isLinux = userAgent.includes('Linux');
+      const isChrome = userAgent.includes('Chrome');
+      const isFirefox = userAgent.includes('Firefox');
+      const isSafari = userAgent.includes('Safari') && !userAgent.includes('Chrome');
+      
+      const baseAccounts = [
+        {
+          id: `${provider}_system_1`,
+          name: getSystemUserName(),
+          email: `${getSystemUserName().toLowerCase().replace(' ', '.')}@${getEmailDomain(provider)}`,
+          provider: provider,
+          profile: generateProfileFromSystem(provider)
+        }
+      ];
+      
+      // Add additional accounts based on common patterns
+      if (Math.random() > 0.5) {
+        baseAccounts.push({
+          id: `${provider}_system_2`,
+          name: 'Work Account',
+          email: `work.${getSystemUserName().toLowerCase().replace(' ', '.')}@${getEmailDomain(provider)}`,
+          provider: provider,
+          profile: generateProfileFromSystem(provider, true)
+        });
+      }
+      
+      return baseAccounts;
+    }
+
+    // Get system user name
+    function getSystemUserName() {
+      // Try to get from various system sources
+      if (navigator.userAgentData && navigator.userAgentData.platform) {
+        return navigator.userAgentData.platform === 'Windows' ? 'Windows User' : 'Mac User';
+      }
+      
+      // Fallback to common names based on browser
+      const isChrome = navigator.userAgent.includes('Chrome');
+      const isFirefox = navigator.userAgent.includes('Firefox');
+      const isSafari = navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome');
+      
+      if (isChrome) return 'Chrome User';
+      if (isFirefox) return 'Firefox User';
+      if (isSafari) return 'Safari User';
+      
+      return 'System User';
+    }
+
+    // Get email domain based on provider
+    function getEmailDomain(provider) {
+      const domains = {
+        google: 'gmail.com',
+        facebook: 'facebook.com',
+        twitter: 'twitter.com'
+      };
+      return domains[provider] || 'example.com';
+    }
+
+    // Generate profile from system information
+    function generateProfileFromSystem(provider, isWork = false) {
+      const baseProfile = {
+        firstName: getSystemUserName().split(' ')[0],
+        lastName: getSystemUserName().split(' ').slice(1).join(' ') || 'User',
+        email: `${getSystemUserName().toLowerCase().replace(' ', '.')}@${getEmailDomain(provider)}`,
+        phone: generatePhoneNumber(),
+        birthdate: generateRandomBirthdate(),
+        gender: Math.random() > 0.5 ? 'male' : 'female',
+        emailNotifications: true,
+        smsNotifications: false
+      };
+      
+      if (isWork) {
+        baseProfile.firstName = 'Work';
+        baseProfile.lastName = 'Account';
+        baseProfile.email = `work.${getSystemUserName().toLowerCase().replace(' ', '.')}@${getEmailDomain(provider)}`;
+      }
+      
+      return baseProfile;
+    }
+
+    // Generate random phone number
+    function generatePhoneNumber() {
+      return `+1${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+    }
+
+    // Generate random birthdate
+    function generateRandomBirthdate() {
+      const start = new Date(1970, 0, 1);
+      const end = new Date(2000, 0, 1);
+      const birthdate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+      return birthdate.toISOString().split('T')[0];
+    }
+
+    // Select system account
+    function selectSystemAccount(account, element) {
+      // Remove selection from all accounts
+      const allAccounts = systemAuthContent.querySelectorAll('.system-account');
+      allAccounts.forEach(acc => {
+        acc.style.borderColor = '#e1e5e9';
+        acc.style.background = 'white';
+      });
+      
+      // Add selection to clicked account
+      element.style.borderColor = '#ff7a18';
+      element.style.background = 'rgba(255, 122, 24, 0.1)';
+      
+      selectedSystemAccount = account;
+    }
+
+    // Complete system authentication
+    function completeSystemAuth() {
+      if (!selectedSystemAccount) {
+        // No account selected, initiate new sign-in
+        initiateNewSignIn();
+        return;
+      }
+      
+      setLoadingState(systemAuthButton, true);
+      
+      // Simulate system authentication process
+      setTimeout(() => {
+        processSystemAuthentication(selectedSystemAccount);
+      }, 2000);
+    }
+
+    // Initiate new sign-in
+    function initiateNewSignIn() {
+      setLoadingState(systemAuthButton, true);
+      
+      // Simulate redirect to provider's sign-in page
+      setTimeout(() => {
+        // Create new system account
+        const newAccount = {
+          id: `${currentProvider}_system_${Date.now()}`,
+          name: getSystemUserName(),
+          email: `${getSystemUserName().toLowerCase().replace(' ', '.')}@${getEmailDomain(currentProvider)}`,
+          provider: currentProvider,
+          profile: generateProfileFromSystem(currentProvider)
+        };
+        
+        // Save to system accounts
+        const systemAccounts = JSON.parse(localStorage.getItem(`systemAccounts_${currentProvider}`)) || [];
+        systemAccounts.push(newAccount);
+        localStorage.setItem(`systemAccounts_${currentProvider}`, JSON.stringify(systemAccounts));
+        
+        processSystemAuthentication(newAccount);
+      }, 1500);
+    }
+
+    // Process system authentication
+    function processSystemAuthentication(account) {
+      closeSystemAuth();
+      
+      // Check if user exists
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const existingUser = users.find(user => user.email === account.email);
+      
+      if (existingUser) {
+        // User exists, log them in
+        const userSession = {
+          id: existingUser.id,
+          fullName: existingUser.fullName,
+          email: existingUser.email,
+          mobile: existingUser.mobile,
+          profile: existingUser.profile,
+          socialProvider: account.provider
+        };
+        
+        localStorage.setItem('currentUser', JSON.stringify(userSession));
+        showMessage('successMessage', `Signed in with ${account.provider}! Redirecting...`);
+        
+        setTimeout(() => {
+          window.location.href = 'homePage.html';
+        }, 1500);
+      } else {
+        // Create new user with system account data
+        const newUser = {
+          id: account.id,
+          fullName: account.name,
+          email: account.email,
+          mobile: account.profile.phone,
+          password: 'system_auth',
+          provider: account.provider,
+          systemAccount: true,
+          createdAt: new Date().toISOString(),
+          profile: account.profile
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Log in the new user
+        const userSession = {
+          id: newUser.id,
+          fullName: newUser.fullName,
+          email: newUser.email,
+          mobile: newUser.mobile,
+          profile: newUser.profile,
+          socialProvider: account.provider
+        };
+        
+        localStorage.setItem('currentUser', JSON.stringify(userSession));
+        showMessage('successMessage', `Welcome to myMart! Your ${account.provider} account has been connected.`);
+        
+        setTimeout(() => {
+          window.location.href = 'homePage.html';
+        }, 1500);
+      }
+    }
+
+    // Close system auth modal
+    function closeSystemAuth() {
+      systemAuthModal.style.display = 'none';
+      currentProvider = '';
+      selectedSystemAccount = null;
+    }
+
+    // [Rest of the existing functions remain the same...]
+    // Find user by email or mobile
+    function findUser(loginId, password) {
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      
+      const isEmail = loginId.includes('@');
+      const isMobile = /^[0-9]{10}$/.test(loginId);
+      
+      if (isEmail) {
+        return users.find(user => 
+          user.email.toLowerCase() === loginId.toLowerCase() && 
+          user.password === password
+        );
+      } else if (isMobile) {
+        return users.find(user => 
+          user.mobile === loginId && 
+          user.password === password
+        );
+      }
+      
+      return null;
+    }
+
+    // Validate form
+    function validateForm() {
+      let isValid = true;
+      const loginId = loginIdInput.value.trim();
+      const password = passwordInput.value;
+
+      hideFieldError('loginIdError');
+      hideFieldError('passwordError');
+      hideMessage('errorMessage');
+
+      const isEmail = loginId.includes('@');
+      const isMobile = /^[0-9]{10}$/.test(loginId);
+      
+      if (!loginId) {
+        showFieldError('loginIdError', 'Please enter your email or mobile number');
+        isValid = false;
+      } else if (!isEmail && !isMobile) {
+        showFieldError('loginIdError', 'Please enter a valid email or 10-digit mobile number');
+        isValid = false;
+      }
+
+      if (!password) {
+        showFieldError('passwordError', 'Please enter your password');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Show field error
+    function showFieldError(fieldId, message) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.textContent = message;
+      fieldError.style.display = 'block';
+      
+      const formGroup = fieldError.closest('.form-group');
+      formGroup.classList.add('error');
+    }
+
+    // Hide field error
+    function hideFieldError(fieldId) {
+      const fieldError = document.getElementById(fieldId);
+      fieldError.style.display = 'none';
+      
+      const formGroup = fieldError.closest('.form-group');
+      formGroup.classList.remove('error');
+    }
+
+    // Show message
+    function showMessage(element, message) {
+      const messageElement = document.getElementById(element);
+      messageElement.textContent = message;
+      messageElement.style.display = 'block';
+    }
+
+    // Hide message
+    function hideMessage(element) {
+      document.getElementById(element).style.display = 'none';
+    }
+
+    // Set loading state
+    function setLoadingState(button, isLoading) {
+      if (isLoading) {
+        button.disabled = true;
+        button.classList.add('loading');
+      } else {
+        button.disabled = false;
+        button.classList.remove('loading');
+      }
+    }
+
+    // Form validation and submission
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!validateForm()) {
+        return;
+      }
+      
+      const loginId = loginIdInput.value.trim();
+      const password = passwordInput.value;
+      
+      attemptLogin(loginId, password);
+    });
+
+    function attemptLogin(loginId, password) {
+      setLoadingState(submitBtn, true);
+      
+      setTimeout(() => {
+        const user = findUser(loginId, password);
+        
+        if (user) {
+          showMessage('successMessage', 'Login successful! Redirecting...');
+          hideMessage('errorMessage');
+          
+          const userSession = {
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            mobile: user.mobile,
+            profile: user.profile
+          };
+          
+          localStorage.setItem('currentUser', JSON.stringify(userSession));
+          
+          if (rememberCheckbox.checked) {
+            localStorage.setItem('rememberedLoginId', loginId);
+          } else {
+            localStorage.removeItem('rememberedLoginId');
+          }
+          
+          setTimeout(() => {
+            window.location.href = 'homePage.html';
+          }, 1500);
+        } else {
+          showMessage('errorMessage', 'Invalid email/mobile or password. Please try again.');
+          setLoadingState(submitBtn, false);
+        }
+      }, 1500);
+    }
+
+    // Forgot password functionality
+    forgotPasswordLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const loginId = loginIdInput.value.trim();
+      
+      if (!loginId) {
+        showMessage('errorMessage', 'Please enter your email or mobile number to reset password');
+        return;
+      }
+      
+      showMessage('successMessage', 'Password reset instructions have been sent to your email/mobile');
+      
+      setTimeout(() => {
+        hideMessage('successMessage');
+      }, 5000);
+    });
+
+    // Real-time validation
+    loginIdInput.addEventListener('blur', function() {
+      const loginId = this.value.trim();
+      const isEmail = loginId.includes('@');
+      const isMobile = /^[0-9]{10}$/.test(loginId);
+      
+      if (loginId && !isEmail && !isMobile) {
+        showFieldError('loginIdError', 'Please enter a valid email or 10-digit mobile number');
+      } else {
+        hideFieldError('loginIdError');
+      }
+    });
+
+    passwordInput.addEventListener('blur', function() {
+      if (!this.value) {
+        showFieldError('passwordError', 'Please enter your password');
+      } else {
+        hideFieldError('passwordError');
+      }
+    });
+
+    // Check if user has previously selected "Remember me"
+    document.addEventListener('DOMContentLoaded', function() {
+      const rememberedLoginId = localStorage.getItem('rememberedLoginId');
+      if (rememberedLoginId) {
+        loginIdInput.value = rememberedLoginId;
+        rememberCheckbox.checked = true;
+      }
+      
+      loginIdInput.focus();
+    });
+
+    // Save login ID if "Remember me" is checked
+    rememberCheckbox.addEventListener('change', function() {
+      const loginId = loginIdInput.value;
+      if (this.checked && loginId) {
+        localStorage.setItem('rememberedLoginId', loginId);
+      } else {
+        localStorage.removeItem('rememberedLoginId');
+      }
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+      if (e.target === systemAuthModal) {
+        closeSystemAuth();
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && systemAuthModal.style.display === 'flex') {
+        closeSystemAuth();
+      }
+      
+      if (e.ctrlKey && e.key === 'Enter') {
+        loginForm.dispatchEvent(new Event('submit'));
+      }
+    });
+  </script>
+</body>
+</html>
