@@ -2,7 +2,7 @@ require('dotenv').config(); // Load .env variables first
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./backend/db/database');
+const { connectDB } = require('./backend/db/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,10 +34,18 @@ app.get('/', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-    console.log('==================================');
-    console.log(`  myMart Server Running!`);
-    console.log(`  URL: http://localhost:${PORT}`);
-    console.log(`  Opens: http://localhost:${PORT}/frontend/homePage.html`);
-    console.log('==================================');
-});
+(async () => {
+    try {
+        await connectDB();
+        app.listen(PORT, () => {
+            console.log('==================================');
+            console.log(`  myMart Server Running!`);
+            console.log(`  URL: http://localhost:${PORT}`);
+            console.log(`  Opens: http://localhost:${PORT}/frontend/homePage.html`);
+            console.log('==================================');
+        });
+    } catch (err) {
+        console.error('Failed to start server:', err);
+        process.exit(1);
+    }
+})();

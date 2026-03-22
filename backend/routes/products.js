@@ -1,28 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/database');
+const { getDb, ObjectId } = require('../db/database');
 
 // Get all products
-router.get('/', (req, res) => {
-    db.all("SELECT * FROM products", [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ products: rows });
-    });
+router.get('/', async (req, res) => {
+    try {
+        const db = getDb();
+        const productsCollection = db.collection('products');
+        const products = await productsCollection.find({}).toArray();
+        res.json({ products });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 // Get a single product by ID
-router.get('/:id', (req, res) => {
-    db.get("SELECT * FROM products WHERE id = ?", [req.params.id], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (!row) {
+router.get('/:id', async (req, res) => {
+    try {
+        const db = getDb();
+        const productsCollection = db.collection('products');
+        const productId = parseInt(req.params.id);
+        const product = await productsCollection.findOne({ _id: productId });
+        
+        if (!product) {
             return res.status(404).json({ error: "Product not found" });
         }
-        res.json({ product: row });
-    });
+        res.json({ product });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;
