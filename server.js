@@ -23,6 +23,11 @@ app.use('/js', express.static(path.join(__dirname, 'frontend', 'js')));
 // Expose /media pointing to frontend/media (images, logo, product pics)
 app.use('/media', express.static(path.join(__dirname, 'frontend', 'media')));
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Server is running' });
+});
+
 // API Routes
 app.use('/api/products', require('./backend/routes/products'));
 app.use('/api/auth', require('./backend/routes/auth'));
@@ -34,18 +39,35 @@ app.get('/', (req, res) => {
 });
 
 // Start Server
-(async () => {
-    try {
-        await connectDB();
-        app.listen(PORT, () => {
-            console.log('==================================');
-            console.log(`  myMart Server Running!`);
-            console.log(`  URL: http://localhost:${PORT}`);
-            console.log(`  Opens: http://localhost:${PORT}/frontend/homePage.html`);
-            console.log('==================================');
-        });
-    } catch (err) {
-        console.error('Failed to start server:', err.message);
-        process.exit(1);
+const startServer = async () => {
+    let dbConnected = false;
+    let retries = 3;
+    
+    while (retries > 0 && !dbConnected) {
+        try {
+            await connectDB();
+            dbConnected = true;
+            console.log('✅ Database connection successful');
+        } catch (err) {
+            retries--;
+            if (retries > 0) {
+                console.log(`⏳ Retrying database connection... (${retries} attempts left)`);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            } else {
+                console.error('❌ Failed to connect to MongoDB after 3 attempts');
+                console.error('⚠️  Check that MONGO_URI environment variable is set correctly');
+                process.exit(1);
+            }
+        }
     }
-})();
+
+    app.listen(PORT, () => {
+        console.log('==================================');
+        console.log(`  ✅ myMart Server Running!`);
+        console.log(`  URL: http://localhost:${PORT}`);
+        console.log(`  Opens: http://localhost:${PORT}/frontend/homePage.html`);
+        console.log('==================================');
+    });
+};
+
+startServer();

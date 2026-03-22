@@ -5,16 +5,26 @@ const DB_NAME = 'mymart_db';
 
 let db = null;
 let client = null;
+let isConnected = false;
 
 const connectDB = async () => {
+    if (isConnected) return db;
+    
     try {
-        client = new MongoClient(MONGO_URI);
+        console.log('🔄 Connecting to MongoDB...');
+        client = new MongoClient(MONGO_URI, {
+            serverSelectionTimeoutMS: 5000,
+            connectTimeoutMS: 10000,
+        });
         await client.connect();
         db = client.db(DB_NAME);
-        console.log('✓ Connected to MongoDB:', MONGO_URI.split('@')[1] || 'local');
+        isConnected = true;
+        console.log('✅ Connected to MongoDB:', MONGO_URI.split('@')[1] || 'local');
         await initDb();
+        return db;
     } catch (err) {
-        console.error('✗ MongoDB Connection Failed:', err.message);
+        console.error('❌ MongoDB Connection Failed:', err.message);
+        console.error('💡 Make sure MONGO_URI environment variable is set');
         throw err;
     }
 };
