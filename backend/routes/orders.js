@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'mymart_super_secret_key_2025';
+const JWT_SECRET = process.env.JWT_SECRET || 'mymart_fallback_secret';
 
 // JWT Auth middleware
 function authenticate(req, res, next) {

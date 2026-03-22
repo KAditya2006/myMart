@@ -1,0 +1,30 @@
+# =============================================
+#   myMart — .gitignore
+# =============================================
+
+# Dependencies — never commit these!
+node_modules/
+
+# Environment variables — NEVER commit this!
+.env
+.env.local
+.env.production
+
+# Database file — contains real user data
+backend/db/mymart.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor files
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/

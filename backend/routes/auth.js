@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'mymart_super_secret_key_2025'; // In production, use environment variables
+const JWT_SECRET = process.env.JWT_SECRET || 'mymart_fallback_secret';
 
 // Signup Route
 router.post('/signup', (req, res) => {
