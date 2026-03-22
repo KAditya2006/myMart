@@ -11,10 +11,10 @@ const connectDB = async () => {
         client = new MongoClient(MONGO_URI);
         await client.connect();
         db = client.db(DB_NAME);
-        console.log('Connected to MongoDB database.');
+        console.log('✓ Connected to MongoDB:', MONGO_URI.split('@')[1] || 'local');
         await initDb();
     } catch (err) {
-        console.error('Error connecting to MongoDB: ' + err.message);
+        console.error('✗ MongoDB Connection Failed:', err.message);
         throw err;
     }
 };
