@@ -1,7 +1,12 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = 'mymart_db';
+
+if (!MONGO_URI) {
+    console.error('❌ MONGO_URI is not defined. Set MONGO_URI in .env or Render environment variables.');
+    process.exit(1);
+}
 
 let db = null;
 let client = null;
