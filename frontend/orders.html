@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Track your orders at myMart">
+  <title>My Orders - myMart</title>
+  <link rel="icon" type="image/png" href="/media/logo.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { background: var(--bg-color); padding-top: 80px; }
+
+    /* ===== Page Header ===== */
+    .page-header {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: white;
+      padding: 50px 40px 40px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+    .page-header p { color: rgba(255,255,255,0.6); font-size: 15px; }
+
+    /* ===== Wrapper ===== */
+    .orders-wrapper { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+    /* ===== Login Required State ===== */
+    .login-required {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 60px 40px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+    .login-required .icon { font-size: 64px; margin-bottom: 20px; }
+    .login-required h2 { font-size: 22px; color: var(--secondary-color); margin-bottom: 10px; }
+    .login-required p { color: var(--text-muted); margin-bottom: 28px; }
+    .login-required a {
+      background: var(--primary-color); color: white;
+      padding: 14px 32px; border-radius: 30px;
+      text-decoration: none; font-weight: 700; font-size: 15px;
+      transition: var(--transition); display: inline-block;
+    }
+    .login-required a:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+    /* ===== Empty Orders State ===== */
+    .empty-orders {
+      background: white; border-radius: var(--radius-xl);
+      padding: 60px 40px; text-align: center;
+      border: 1px solid var(--border-light);
+    }
+    .empty-orders .icon { font-size: 72px; margin-bottom: 20px; opacity: 0.4; }
+    .empty-orders h2 { font-size: 22px; color: var(--secondary-color); margin-bottom: 10px; }
+    .empty-orders p { color: var(--text-muted); margin-bottom: 28px; }
+    .empty-orders a {
+      background: var(--primary-color); color: white;
+      padding: 14px 32px; border-radius: 30px;
+      text-decoration: none; font-weight: 700;
+    }
+
+    /* ===== Order Card ===== */
+    .order-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .order-card:hover { box-shadow: var(--shadow-md); }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 28px;
+      background: var(--bg-color);
+      border-bottom: 1px solid var(--border-light);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .order-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+    .order-meta-item { text-align: left; }
+    .order-meta-item .label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
+    .order-meta-item .value { font-size: 14px; font-weight: 700; color: var(--secondary-color); }
+
+    .order-status {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-pending { background: #fff7ed; color: #c2410c; }
+    .status-processing { background: #eff6ff; color: #1d4ed8; }
+    .status-shipped { background: #f0fdf4; color: #15803d; }
+    .status-delivered { background: #dcfce7; color: #166534; }
+    .status-cancelled { background: #fef2f2; color: #dc2626; }
+
+    /* ===== Order Items ===== */
+    .order-items { padding: 0 28px; }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .order-item:last-child { border-bottom: none; }
+    .order-item img {
+      width: 68px; height: 68px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      background: var(--bg-color);
+      padding: 6px;
+      flex-shrink: 0;
+    }
+    .order-item-info { flex: 1; }
+    .order-item-info h4 { font-size: 15px; font-weight: 600; color: var(--secondary-color); margin-bottom: 4px; }
+    .order-item-info .category { font-size: 12px; color: var(--primary-color); font-weight: 600; text-transform: uppercase; }
+    .order-item-info .qty { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .order-item-price { font-size: 15px; font-weight: 700; color: var(--secondary-color); white-space: nowrap; }
+
+    /* ===== Order Footer ===== */
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      background: var(--bg-color);
+      border-top: 1px solid var(--border-light);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .order-footer-left { display: flex; gap: 24px; flex-wrap: wrap; }
+    .order-footer-detail { font-size: 13px; color: var(--text-muted); }
+    .order-footer-detail strong { color: var(--secondary-color); }
+    .order-total { font-size: 18px; font-weight: 800; color: var(--primary-color); }
+
+    /* ===== Collapsed Items ===== */
+    .show-more-items {
+      background: none; border: none;
+      color: var(--primary-color); font-size: 13px;
+      font-weight: 600; cursor: pointer; padding: 8px 0 16px;
+      display: block;
+      transition: var(--transition);
+    }
+    .show-more-items:hover { text-decoration: underline; }
+
+    /* ===== Stats Bar ===== */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+    .stat-card .stat-num { font-size: 30px; font-weight: 800; color: var(--primary-color); margin-bottom: 4px; }
+    .stat-card .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    /* ===== Skeleton Loader ===== */
+    .skeleton-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .skeleton-header { height: 72px; }
+    .skeleton-body { padding: 20px 28px; }
+    .skeleton-row { height: 68px; margin-bottom: 12px; border-radius: var(--radius-md); }
+    .skeleton-footer { height: 60px; }
+    .shimmer { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ===== Re-order Button ===== */
+    .reorder-btn {
+      background: transparent; color: var(--secondary-color);
+      border: 1.5px solid var(--border-light); padding: 9px 20px;
+      border-radius: var(--radius-md); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: var(--transition);
+    }
+    .reorder-btn:hover { background: var(--secondary-color); color: white; border-color: var(--secondary-color); }
+
+    /* Delivery tracker */
+    .tracker { display: flex; align-items: center; gap: 0; margin: 0 28px 20px; padding-top: 16px; }
+    .tracker-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+    .tracker-step:not(:last-child)::after {
+      content: ''; position: absolute; top: 13px;
+      left: 50%; width: 100%; height: 2px;
+      background: var(--border-light); z-index: 0;
+    }
+    .tracker-step.done:not(:last-child)::after { background: var(--primary-color); }
+    .tracker-dot {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--border-light); border: 2px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; position: relative; z-index: 1;
+    }
+    .tracker-step.done .tracker-dot { background: var(--primary-color); border-color: var(--primary-color); color: white; }
+    .tracker-step.current .tracker-dot { background: white; border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(255,87,34,0.15); }
+    .tracker-label { font-size: 11px; text-align: center; margin-top: 6px; color: var(--text-muted); font-weight: 500; }
+    .tracker-step.done .tracker-label { color: var(--primary-color); font-weight: 700; }
+
+    @media (max-width: 700px) {
+      .order-meta { gap: 16px; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .order-footer { flex-direction: column; align-items: flex-start; }
+      .tracker-label { font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo"><a href="/frontend/homePage.html"><img src="/media/logo.png" alt="myMart"></a></div>
+    <ul class="nav-links">
+      <li><a href="/frontend/homePage.html">Home</a></li>
+      <li><a href="/frontend/shop.html">Shop</a></li>
+      <li><a href="/frontend/orders.html" class="active">My Orders</a></li>
+    </ul>
+    <div class="actions">
+      <a href="/frontend/profile.html" id="profileLink" class="outline-btn">Profile</a>
+      <a href="/frontend/cart.html" class="cart-link">🛒 Cart <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>📦 My Orders</h1>
+    <p>Track all your purchases and order history in one place.</p>
+  </div>
+
+  <div class="orders-wrapper">
+
+    <!-- Login Required (shown if not logged in) -->
+    <div class="login-required" id="loginRequired" style="display:none">
+      <div class="icon">🔐</div>
+      <h2>Please Sign In</h2>
+      <p>You need to be logged in to view your order history.</p>
+      <a href="/frontend/login.html">Sign In to Continue</a>
+    </div>
+
+    <!-- Skeleton loading state -->
+    <div id="skeletonLoader">
+      <div class="skeleton-card">
+        <div class="skeleton-header shimmer"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-row shimmer"></div>
+          <div class="skeleton-row shimmer"></div>
+        </div>
+        <div class="skeleton-footer shimmer"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-header shimmer"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-row shimmer"></div>
+        </div>
+        <div class="skeleton-footer shimmer"></div>
+      </div>
+    </div>
+
+    <!-- Main orders content (hidden until loaded) -->
+    <div id="ordersContent" style="display:none">
+      <div class="stats-bar" id="statsBar"></div>
+      <div id="ordersList"></div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer style="margin-top:60px">
+    <div class="footer-container">
+      <div class="footer-col"><h3>myMart</h3><p style="color:var(--text-muted);font-size:14px;margin-top:10px">Your one-stop shop.</p></div>
+      <div class="footer-col"><h3>Quick Links</h3><ul>
+        <li><a href="/frontend/homePage.html">Home</a></li>
+        <li><a href="/frontend/shop.html">Shop</a></li>
+        <li><a href="/frontend/orders.html">My Orders</a></li>
+      </ul></div>
+    </div>
+    <div style="text-align:center;padding-top:30px;margin-top:30px;border-top:1px solid var(--border-light);color:var(--text-muted);font-size:13px">© 2025 myMart. All Rights Reserved.</div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/cart.js"></script>
+  <script>
+    const TRACKER_STEPS = [
+      { label: 'Placed', icon: '📋' },
+      { label: 'Confirmed', icon: '✅' },
+      { label: 'Shipped', icon: '🚚' },
+      { label: 'Delivered', icon: '🏠' }
+    ];
+
+    function getStatusStep(status) {
+      const map = { Pending: 0, Processing: 1, Shipped: 2, Delivered: 3, Cancelled: -1 };
+      return map[status] ?? 0;
+    }
+
+    function statusClass(status) {
+      return `status-${(status || 'pending').toLowerCase()}`;
+    }
+
+    function paymentIcon(method) {
+      const icons = { card: '💳', upi: '📱', cod: '💵', netbanking: '🏦' };
+      return icons[method] || '💳';
+    }
+
+    function buildTracker(status) {
+      const currentStep = getStatusStep(status);
+      if (status === 'Cancelled') {
+        return `<div class="tracker" style="justify-content:center;margin:16px 28px">
+          <span style="background:#fef2f2;color:#dc2626;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:700">❌ Order Cancelled</span>
+        </div>`;
+      }
+      return `<div class="tracker">` +
+        TRACKER_STEPS.map((step, i) =>
+          `<div class="tracker-step ${i < currentStep ? 'done' : i === currentStep ? 'current' : ''}">
+            <div class="tracker-dot">${i < currentStep ? '✓' : step.icon}</div>
+            <div class="tracker-label">${step.label}</div>
+          </div>`
+        ).join('') +
+      `</div>`;
+    }
+
+    function buildOrderCard(order, index) {
+      const addr = order.shipping_address || {};
+      const dateStr = `Order #MYMART-${order.id}`;
+      const itemsToShow = order.items.slice(0, 2);
+      const extraCount = order.items.length - 2;
+
+      const itemsHtml = itemsToShow.map(item => `
+        <div class="order-item">
+          <img src="${item.image || '/media/logo.png'}" alt="${item.name}" onerror="this.src='/media/logo.png'">
+          <div class="order-item-info">
+            <div class="category">${item.category || 'Product'}</div>
+            <h4>${item.name || 'Unknown Product'}</h4>
+            <div class="qty">Qty: ${item.quantity} × ₹${(item.price || 0).toLocaleString()}</div>
+          </div>
+          <div class="order-item-price">₹${((item.price || 0) * item.quantity).toLocaleString()}</div>
+        </div>`).join('');
+
+      const extraHtml = extraCount > 0
+        ? `<button class="show-more-items" onclick="toggleExtraItems(${order.id})">
+            + ${extraCount} more item${extraCount > 1 ? 's' : ''} →
+           </button>`
+        : '';
+
+      const hiddenItems = order.items.slice(2).map(item => `
+        <div class="order-item extra-item-${order.id}" style="display:none">
+          <img src="${item.image || '/media/logo.png'}" alt="${item.name}" onerror="this.src='/media/logo.png'">
+          <div class="order-item-info">
+            <div class="category">${item.category || 'Product'}</div>
+            <h4>${item.name || 'Unknown Product'}</h4>
+            <div class="qty">Qty: ${item.quantity} × ₹${(item.price || 0).toLocaleString()}</div>
+          </div>
+          <div class="order-item-price">₹${((item.price || 0) * item.quantity).toLocaleString()}</div>
+        </div>`).join('');
+
+      return `
+        <div class="order-card" id="order-card-${order.id}">
+          <!-- Header -->
+          <div class="order-header">
+            <div class="order-meta">
+              <div class="order-meta-item">
+                <div class="label">Order ID</div>
+                <div class="value">#MYMART-${order.id}</div>
+              </div>
+              <div class="order-meta-item">
+                <div class="label">Items</div>
+                <div class="value">${order.items.length} item${order.items.length !== 1 ? 's' : ''}</div>
+              </div>
+              <div class="order-meta-item">
+                <div class="label">Payment</div>
+                <div class="value">${paymentIcon(order.payment_method)} ${(order.payment_method || 'card').toUpperCase()}</div>
+              </div>
+              <div class="order-meta-item">
+                <div class="label">Total</div>
+                <div class="value" style="color:var(--primary-color)">₹${(order.total || 0).toLocaleString()}</div>
+              </div>
+            </div>
+            <span class="order-status ${statusClass(order.status)}">${order.status || 'Pending'}</span>
+          </div>
+
+          <!-- Delivery Tracker -->
+          ${buildTracker(order.status || 'Pending')}
+
+          <!-- Items -->
+          <div class="order-items">
+            ${itemsHtml}
+            ${hiddenItems}
+            ${extraHtml}
+          </div>
+
+          <!-- Footer -->
+          <div class="order-footer">
+            <div class="order-footer-left">
+              <div class="order-footer-detail">
+                📍 <strong>Ship to:</strong>
+                ${addr.firstName || ''} ${addr.lastName || ''}, ${addr.city || ''}, ${addr.state || ''} - ${addr.pincode || ''}
+              </div>
+              <div class="order-footer-detail">
+                📞 <strong>${addr.phone || 'N/A'}</strong>
+              </div>
+            </div>
+            <button class="reorder-btn" onclick="reorderItems(${order.id})">🔄 Reorder</button>
+          </div>
+        </div>`;
+    }
+
+    function toggleExtraItems(orderId) {
+      const extras = document.querySelectorAll(`.extra-item-${orderId}`);
+      const btn = document.querySelector(`#order-card-${orderId} .show-more-items`);
+      const hidden = extras[0]?.style.display === 'none';
+      extras.forEach(el => el.style.display = hidden ? 'flex' : 'none');
+      if (btn) btn.textContent = hidden ? '▲ Show less' : `+ ${extras.length} more item${extras.length > 1 ? 's' : ''} →`;
+    }
+
+    let allOrders = [];
+
+    async function loadOrders() {
+      if (!api.isLoggedIn()) {
+        document.getElementById('skeletonLoader').style.display = 'none';
+        document.getElementById('loginRequired').style.display = 'block';
+        return;
+      }
+
+      try {
+        const data = await api.fetch('/orders');
+        allOrders = data.orders || [];
+
+        document.getElementById('skeletonLoader').style.display = 'none';
+        document.getElementById('ordersContent').style.display = 'block';
+
+        // Stats
+        const totalSpent = allOrders.reduce((s, o) => s + (o.total || 0), 0);
+        const delivered = allOrders.filter(o => o.status === 'Delivered').length;
+        document.getElementById('statsBar').innerHTML = `
+          <div class="stat-card"><div class="stat-num">${allOrders.length}</div><div class="stat-label">Total Orders</div></div>
+          <div class="stat-card"><div class="stat-num">₹${totalSpent.toLocaleString()}</div><div class="stat-label">Total Spent</div></div>
+          <div class="stat-card"><div class="stat-num">${delivered}</div><div class="stat-label">Delivered</div></div>`;
+
+        const listEl = document.getElementById('ordersList');
+        if (!allOrders.length) {
+          listEl.innerHTML = `
+            <div class="empty-orders">
+              <div class="icon">📦</div>
+              <h2>No Orders Yet</h2>
+              <p>You haven't placed any orders. Start shopping!</p>
+              <a href="/frontend/shop.html">Shop Now →</a>
+            </div>`;
+          return;
+        }
+        listEl.innerHTML = allOrders.map((o, i) => buildOrderCard(o, i)).join('');
+      } catch (err) {
+        document.getElementById('skeletonLoader').style.display = 'none';
+        document.getElementById('ordersContent').style.display = 'block';
+        document.getElementById('ordersList').innerHTML = `
+          <div class="empty-orders">
+            <div class="icon">⚠️</div>
+            <h2>Could not load orders</h2>
+            <p>${err.message || 'Please try again later.'}</p>
+            <a href="/frontend/homePage.html">Back to Home</a>
+          </div>`;
+      }
+    }
+
+    function reorderItems(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+      order.items.forEach(item => {
+        cartManager.addToCart({ id: item.product_id, name: item.name, price: item.price, image: item.image, quantity: 0 }, item.quantity);
+      });
+      cartManager.showToast(`${order.items.length} item${order.items.length > 1 ? 's' : ''} added to cart!`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = api.getUser();
+      if (user) {
+        const link = document.getElementById('profileLink');
+        link.textContent = user.name?.split(' ')[0] || 'Profile';
+      }
+      loadOrders();
+    });
+  </script>
+</body>
+</html>
