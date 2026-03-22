@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
             console.log('==================================');
         });
     } catch (err) {
-        console.error('Failed to start server:', err);
+        console.error('Failed to start server:', err.message);
         process.exit(1);
     }
 })();
